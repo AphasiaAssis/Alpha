@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<head>
+
+</head>
+<body>
+
+ <img id="image"src=""/>
+<br/>
+ <input type="file"onchange="selectImage(this);"/>
+<br/>
+ <input type="button"onclick="uploadImage();"value="提交"/>
+ <script src="/static/js/jquery-2.1.4.js"></script>
+<script>
+ var image = '';
+ function selectImage(file){
+    if(!file.files || !file.files[0]){
+    return;
+    }
+    var reader = new FileReader();
+ reader.onload = function(evt){
+ document.getElementById('image').src = evt.target.result;
+ image = evt.target.result;
+}
+reader.readAsDataURL(file.files[0]);
+}
+ function uploadImage(){
+    $.ajax({
+         type:'POST',
+         url: '/index/',
+         data: {'image':image},
+         async: false,
+         dataType: 'json',
+         success: function(data){
+                if(data.success){
+                    alert('上传成功');
+                }else{
+                    alert('上传失败');
+                }
+            },
+         error: function(err){
+            alert('网络故障');
+         }
+      });
+}
+</script>
+
+</body>
+</html>
